@@ -1,5 +1,5 @@
 # web-widget-manifest
-A file format for describing web widget application.
+A file format for describing web widget applications.
 
 The schema is published as a [JSON Schema](https://json-schema.org/) file, in `schema.json`. The schema is written in TypeScript (see [schema.d.ts](https://github.com/web-widget/web-widget-manifest/blob/master/schema.d.ts)) and then compiled to JSON Schema.
 
@@ -30,7 +30,7 @@ In order to allow tools to find npm packages with web widget application manifes
 ```json
 {
   "name": "example-package",
-  "webWidgets": "custom-elements.json",
+  "webWidgets": "web-widgets.json",
 }
 ```
 
