@@ -9,19 +9,9 @@
  */
 
 /**
- * The top-level interface of a custom elements manifest file.
- *
- * Because custom elements are JavaScript classes, describing a custom element
- * may require describing arbitrary JavaScript concepts like modules, classes,
- * functions, etc. So custom elements manifests are capable of documenting
- * the elements in a package, as well as those JavaScript concepts.
- *
- * The modules described in a package should be the public entrypoints that
- * other packages may import from. Multiple modules may export the same object
- * via re-exports, but in most cases a package should document the single
- * canonical export that should be used.
+ * The top-level interface of a web widget application manifest file.
  */
-export interface Package {
+ export interface Package {
   /**
    * The version of the schema used in this file.
    */
@@ -31,8 +21,8 @@ export interface Package {
    * The Markdown to use for the main readme of this package.
    *
    * This can be used to override the readme used by Github or npm if that
-   * file contains information irrelevant to custom element catalogs and
-   * documentation viewers.
+   * file contains information irrelevant to web widget application catalogs
+   * and documentation viewers.
    */
   readme?: string;
 
@@ -42,12 +32,12 @@ export interface Package {
   modules: Array<Module>;
 }
 
-// This type may expand in the future to include JSON, CSS, or HTML
+// This type may expand in the future to include JavaScript, JSON, CSS, or HTML
 // modules.
-export type Module = JavaScriptModule;
+export type Module = WebWidgetApplication;
 
-export interface JavaScriptModule {
-  kind: 'javascript-module';
+export interface WebWidgetApplication {
+  kind: 'web-widget-application';
 
   path: string;
 
@@ -70,69 +60,9 @@ export interface JavaScriptModule {
    */
   declarations?: Array<Declaration>;
 
-  /**
-   * The exports of a module. This includes JavaScript exports and
-   * custom element definitions.
-   */
-  exports?: Array<Export>;
 }
 
-export type Export = JavaScriptExport | CustomElementExport;
-
-export interface JavaScriptExport {
-  kind: 'js';
-
-  /**
-   * The name of the exported symbol.
-   *
-   * JavaScript has a number of ways to export objects which determine the
-   * correct name to use.
-   *
-   * - Default exports must use the name "default".
-   * - Named exports use the name that is exported. If the export is renamed
-   *   with the "as" clause, use the exported name.
-   * - Aggregating exports (`* from`) should use the name `*`
-   */
-  name: string;
-
-  /**
-   * A reference to the exported declaration.
-   *
-   * In the case of aggregating exports, the reference's `module` field must be
-   * defined and the `name` field must be `"*"`.
-   */
-  declaration: Reference;
-}
-
-/**
- * A global custom element defintion, ie the result of a
- * `customElements.define()` call.
- *
- * This is represented as an export because a definition makes the element
- * available outside of the module it's defined it.
- */
-export interface CustomElementExport {
-  kind: 'custom-element-definition';
-
-  /**
-   * The tag name of the custom element.
-   */
-  name: string;
-
-  /**
-   * A reference to the class or other declaration that implements the
-   * custom element.
-   */
-  declaration: Reference;
-}
-
-export type Declaration =
-  | ClassDeclaration
-  | FunctionDeclaration
-  | MixinDeclaration
-  | VariableDeclaration
-  | CustomElementDeclaration
-  | CustomElementMixinDeclaration;
+export type Declaration = WebWidgetApplicationDeclaration;
 
 /**
  * A reference to an export of a module.
@@ -164,49 +94,16 @@ export interface SourceReference {
 }
 
 /**
- * A description of a custom element class.
- *
- * Custom elements are JavaScript classes, so this extends from
- * `ClassDeclaration` and adds custom-element-specific features like
- * attributes, events, and slots.
- *
- * Note that `tagName` in this interface is optional. Tag names are not
- * neccessarily part of a custom element class, but belong to the definition
- * (often called the "registration") or the `customElements.define()` call.
- *
- * Because classes and tag names can only be registered once, there's a
- * one-to-one relationship between classes and tag names. For ease of use,
- * we allow the tag name here.
- *
- * Some packages define and register custom elements in separate modules. In
- * these cases one `Module` should contain the `CustomElement` without a
- * tagName, and another `Module` should contain the
- * `CustomElementExport`.
+ * A description of a web widget application.
  */
-export type CustomElementDeclaration = ClassDeclaration & CustomElement;
-
-/**
- * The additional fields that a custom element adds to classes and mixins.
- */
-export interface CustomElement extends ClassLike {
-  /**
-   * An optional tag name that should be specified if this is a
-   * self-registering element.
-   *
-   * Self-registering elements must also include a CustomElementExport
-   * in the module's exports.
-   */
-  tagName?: string;
+export type WebWidgetApplicationDeclaration = {
 
   /**
-   * The attributes that this element is known to understand.
+   * The parameters that this element is known to understand.
    */
-  attributes?: Attribute[];
+  parameters?: Parameter[];
 
-  /**
-   * The events that this element fires.
-   */
-  events?: Event[];
+  portals?: Portal[],
 
   /**
    * The shadow dom content slots that this element accepts.
@@ -219,18 +116,14 @@ export interface CustomElement extends ClassLike {
 
   demos?: Demo[];
 
-  /**
-   * Distinguishes a regular JavaScript class from a
-   * custom element class
-   */
-  customElement: true;
+  data?: Data;
 
-  members?: Array<CustomElementMember>;
+  sandboxed?: boolean;
+
+  // TODO sharedDependencies
 }
 
-export type CustomElementMember = CustomElementField | ClassMethod;
-
-export interface Attribute {
+export interface Parameter {
   name: string;
 
   /**
@@ -242,8 +135,6 @@ export interface Attribute {
    * A markdown description.
    */
   description?: string;
-
-  inheritedFrom?: Reference;
 
   /**
    * The type that the attribute will be serialized/deserialized as.
@@ -253,18 +144,13 @@ export interface Attribute {
   /**
    * The default value of the attribute, if any.
    *
-   * As attributes are always strings, this is the actual value, not a human
+   * As parameters are always strings, this is the actual value, not a human
    * readable description.
    */
   default?: string;
-
-  /**
-   * The name of the field this attribute is associated with, if any.
-   */
-  fieldName?: string;
 }
 
-export interface Event {
+export interface Portal {
   name: string;
 
   /**
@@ -276,13 +162,6 @@ export interface Event {
    * A markdown description.
    */
   description?: string;
-
-  /**
-   * The type of the event object that's fired.
-   */
-  type: Type;
-
-  inheritedFrom?: Reference;
 }
 
 export interface Slot {
@@ -389,79 +268,6 @@ export interface TypeReference extends Reference {
 }
 
 /**
- * The common interface of classes and mixins.
- */
-export interface ClassLike {
-  name: string;
-
-  /**
-   * A markdown summary suitable for display in a listing.
-   */
-  summary?: string;
-
-  /**
-   * A markdown description of the class.
-   */
-  description?: string;
-
-  /**
-   * The superclass of this class.
-   *
-   * If this class is defined with mixin
-   * applications, the prototype chain includes the mixin applications
-   * and the true superclass is computed from them.
-   */
-  superclass?: Reference;
-
-  /**
-   * Any class mixins applied in the extends clause of this class.
-   *
-   * If mixins are applied in the class definition, then the true superclass
-   * of this class is the result of applying mixins in order to the superclass.
-   *
-   * Mixins must be listed in order of their application to the superclass or
-   * previous mixin application. This means that the innermost mixin is listed
-   * first. This may read backwards from the common order in JavaScript, but
-   * matches the order of language used to describe mixin application, like
-   * "S with A, B".
-   *
-   * @example
-   *
-   * ```javascript
-   * class T extends B(A(S)) {}
-   * ```
-   *
-   * is described by:
-   * ```json
-   * {
-   *   "kind": "class",
-   *   "superclass": {
-   *     "name": "S"
-   *   },
-   *   "mixins": [
-   *     {
-   *       "name": "A"
-   *     },
-   *     {
-   *       "name": "B"
-   *     },
-   *   ]
-   * }
-   * ```
-   */
-  mixins?: Array<Reference>;
-  members?: Array<ClassMember>;
-
-  source?: SourceReference;
-}
-
-export interface ClassDeclaration extends ClassLike {
-  kind: 'class';
-}
-
-export type ClassMember = ClassField | ClassMethod;
-
-/**
  * The common interface of variables, class fields, and function
  * parameters.
  */
@@ -483,139 +289,12 @@ export interface PropertyLike {
   default?: string;
 }
 
-export interface ClassField extends PropertyLike {
-  kind: 'field';
-  static?: boolean;
-  privacy?: Privacy;
-  inheritedFrom?: Reference;
-  source?: SourceReference;
-}
-
-/**
- * Additional metadata for fields on custom elements.
- */
-export interface CustomElementField extends ClassField {
-  /**
-   * The corresponding attribute name if there is one.
-   */
-  attribute?: string;
-
-  /**
-   * If the property reflects to an attribute.
-   *
-   * If this is true, `attribute` must be defined.
-   */
-  reflects?: boolean;
-}
-
-export interface ClassMethod extends FunctionLike {
-  kind: 'method';
-  static?: boolean;
-  privacy?: Privacy;
-  inheritedFrom?: Reference;
-  source?: SourceReference;
-}
-
-/**
- * A description of a class mixin.
- *
- * Mixins are functions which generate a new subclass of a given superclass.
- * This interfaces describes the class and custom element features that
- * are added by the mixin. As such, it extends the CustomElement interface and
- * ClassLike interface.
- *
- * Since mixins are functions, it also extends the FunctionLike interface. This
- * means a mixin is callable, and has parameters and a return type.
- *
- * The return type is often hard or impossible to accurately describe in type
- * systems like TypeScript. It requires generics and an `extends` operator
- * that TypeScript lacks. Therefore it's recommended that the return type is
- * left empty. The most common form of a mixin function takes a single
- * argument, so consumers of this interface should assume that the return type
- * is the single argument subclassed by this declaration.
- *
- * A mixin should not have a superclass. If a mixins composes other mixins,
- * they should be listed in the `mixins` field.
- *
- * See [this article]{@link https://justinfagnani.com/2015/12/21/real-mixins-with-javascript-classes/}
- * for more information on the classmixin pattern in JavaScript.
- *
- * @example
- *
- * This JavaScript mixin declaration:
- * ```javascript
- * const MyMixin = (base) => class extends base {
- *   foo() { ... }
- * }
- * ```
- *
- * Is described by this JSON:
- * ```json
- * {
- *   "kind": "mixin",
- *   "name": "MyMixin",
- *   "parameters": [
- *     {
- *       "name": "base",
- *     }
- *   ],
- *   "members": [
- *     {
- *       "kind": "method",
- *       "name": "foo",
- *     }
- *   ]
- * }
- * ```
- */
-export interface MixinDeclaration extends ClassLike, FunctionLike {
-  kind: 'mixin';
-}
-
-/**
- * A class mixin that also adds custom element related properties.
- */
-export type CustomElementMixinDeclaration = MixinDeclaration & CustomElement;
-
-export interface VariableDeclaration extends PropertyLike {
-  kind: 'variable';
-  source?: SourceReference;
-}
-
-export interface FunctionDeclaration extends FunctionLike {
-  kind: 'function';
-  source?: SourceReference;
-}
-
 export interface Parameter extends PropertyLike {
   /**
    * Whether the parameter is optional. Undefined implies non-optional.
    */
   optional?: boolean;
 }
-
-export interface FunctionLike {
-  name: string;
-
-  /**
-   * A markdown summary suitable for display in a listing.
-   */
-  summary?: string;
-
-  /**
-   * A markdown description.
-   */
-  description?: string;
-
-  parameters?: Parameter[];
-
-  return?: {
-    type?: Type;
-    description?: string;
-  };
-}
-
-export type Privacy = 'public' | 'private' | 'protected';
 
 export interface Demo {
   /**
@@ -630,4 +309,30 @@ export interface Demo {
   url: string;
 
   source?: SourceReference;
+}
+
+export interface Data {
+  name: string;
+
+  /**
+   * A markdown summary suitable for display in a listing.
+   */
+  summary?: string;
+
+  /**
+   * A markdown description.
+   */
+  description?: string;
+
+  /**
+   * The type that the data will be serialized/deserialized as.
+   */
+  type?: Type;
+
+  /**
+   * The default value of the data, if any.
+   *
+   * This is the actual value, not a human readable description.
+   */
+  default?: object;
 }
