@@ -1,6 +1,6 @@
 {
   "name": "@web-widget/manifest",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "A file format for describing web widget application",
   "main": "schema.json",
   "scripts": {
