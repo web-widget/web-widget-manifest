@@ -13,7 +13,7 @@ import {JSONSchema7 as JSONSchema} from 'json-schema';
 /**
  * The top-level interface of a web widget application manifest file.
  */
-export interface Package {
+export interface Package extends NpmPackageLike {
   /**
    * The version of the schema used in this file.
    */
@@ -32,6 +32,16 @@ export interface Package {
    * An array of the modules this package contains.
    */
   modules: Array<Module>;
+
+  icons?: Icon[];
+}
+
+export interface NpmPackageLike {
+  name: string;
+
+  main?: string;
+
+  version: string;
 }
 
 // This type may expand in the future to include JavaScript, JSON, CSS, or HTML
@@ -67,13 +77,6 @@ export type Declaration = WebWidgetApplicationDeclaration;
 export type WebWidgetApplicationDeclaration = {
 
   /**
-   * The parameters that this element is known to understand.
-   */
-  parameters?: Parameter[];
-
-  portals?: Portal[];
-
-  /**
    * The shadow dom content slots that this element accepts.
    */
   slots?: Slot[];
@@ -84,51 +87,26 @@ export type WebWidgetApplicationDeclaration = {
 
   data?: Data;
 
-  sandboxed?: boolean;
+  /**
+   * Read and write data through the user interface
+   */
+  dataUserInterface?: DataUserInterface;
 
-  // TODO features, locales, sharedDependencies, placeholder, fallback, width, height
+  /* TODO
+
+  - parameters
+  - portals
+  - sandboxed
+  - features
+  - csp
+  - resources
+  - locales
+  - sharedDependencies
+  - placeholder
+  - size
+
+   */
 };
-
-export interface Parameter {
-  name: string;
-
-  /**
-   * A markdown summary suitable for display in a listing.
-   */
-  summary?: string;
-
-  /**
-   * A markdown description.
-   */
-  description?: string;
-
-  /**
-   * The default value of the attribute, if any.
-   *
-   * As parameters are always strings, this is the actual value, not a human
-   * readable description.
-   */
-  default?: string;
-
-  /**
-   * Whether the parameter is optional. Undefined implies non-optional.
-   */
-  optional?: boolean;
-}
-
-export interface Portal {
-  name: string;
-
-  /**
-   * A markdown summary suitable for display in a listing.
-   */
-  summary?: string;
-
-  /**
-   * A markdown description.
-   */
-  description?: string;
-}
 
 export interface Slot {
   /**
@@ -222,4 +200,19 @@ export interface Data {
    * This is the actual value, not a human readable description.
    */
   default?: object;
+}
+
+export interface DataUserInterface {
+  path: string;
+}
+
+/**
+ * @see https://www.w3.org/TR/appmanifest/#icons-member
+ */
+export interface Icon {
+  path: string;
+
+  sizes: string;
+
+  type?: string;
 }
