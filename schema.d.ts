@@ -13,11 +13,43 @@ import {JSONSchema7 as JSONSchema} from 'json-schema';
 /**
  * The top-level interface of a web widget application manifest file.
  */
-export interface Package extends NpmPackageLike {
+export interface Package {
   /**
    * The version of the schema used in this file.
    */
   schemaVersion: string;
+
+  /**
+   * Package name.
+   */
+  name: string;
+
+  /**
+   * A short name suitable for display in a listing.
+   */
+  displayName?: string;
+
+  /**
+   * Package version.
+   */
+  version: string;
+
+  /**
+   * ES Module path
+   */
+  path: string;
+
+  /**
+   * SystemJS module path. It exists to solve browser compatibility issues.
+   */
+  fallbackPath?: string;
+
+  /**
+   * A markdown summary suitable for display in a listing.
+   */
+  summary?: string;
+
+  icons?: Icon[];
 
   /**
    * The Markdown to use for the main readme of this package.
@@ -26,55 +58,18 @@ export interface Package extends NpmPackageLike {
    * file contains information irrelevant to web widget application catalogs
    * and documentation viewers.
    */
-  readme?: string;
+  description?: string;
 
   /**
    * An array of the modules this package contains.
    */
-  modules: Array<Module>;
-
-  icons?: Icon[];
+  declaration: Declaration;
 }
-
-export interface NpmPackageLike {
-  name: string;
-
-  main?: string;
-
-  version: string;
-}
-
-// This type may expand in the future to include JavaScript, JSON, CSS, or HTML
-// modules.
-export type Module = WebWidgetApplication;
-
-export interface WebWidgetApplication {
-  kind: 'web-widget-application';
-
-  path: string;
-
-  /**
-   * A markdown summary suitable for display in a listing.
-   */
-  summary?: string;
-
-  /**
-   * A markdown description of the module.
-   */
-  description?: string;
-
-  /**
-   * The declaration of a module.
-   */
-  declaration?: Declaration;
-}
-
-export type Declaration = WebWidgetApplicationDeclaration;
 
 /**
  * A description of a web widget application.
  */
-export type WebWidgetApplicationDeclaration = {
+export type Declaration = {
 
   /**
    * The shadow dom content slots that this element accepts.
@@ -177,22 +172,11 @@ export interface CssCustomProperty {
 }
 
 export interface Data {
-  name: string;
 
   /**
-   * A markdown summary suitable for display in a listing.
+   * JSON schema.
    */
-  summary?: string;
-
-  /**
-   * A markdown description.
-   */
-  description?: string;
-
-  /**
-   * The type that the data will be serialized/deserialized as.
-   */
-  declaration?: JSONSchema;
+  schema?: JSONSchema;
 
   /**
    * The default value of the data, if any.
@@ -203,7 +187,15 @@ export interface Data {
 }
 
 export interface DataUserInterface {
+  /**
+   * ES Module path
+   */
   path: string;
+
+  /**
+   * SystemJS module path. It exists to solve browser compatibility issues.
+   */
+  fallbackPath?: string;
 }
 
 /**
