@@ -26,12 +26,12 @@ import * as schema from '@web-widget/manifest/schema';
 
 ## Referencing manifests from npm packages
 
-In order to allow tools to find npm packages with web widget application manifests without having to download package tarballs, packages should have a `"webWidgets"` field in their `package.json` that points to the manifest:
+In order to allow tools to find npm packages with web widget application manifests without having to download package tarballs, packages should have a `"webWidget"` field in their `package.json` that points to the manifest:
 
 ```json
 {
   "name": "example-package",
-  "webWidgets": "web-widgets.json",
+  "webWidget": "web-widget.json",
 }
 ```
 

@@ -79,7 +79,7 @@ export interface Package {
   /* TODO:
   - categories
   - keywords
-  - preview || placeholder
+  - template || preview || placeholder
   - parameters
   - portals
   - sandboxed
