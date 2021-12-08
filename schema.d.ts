@@ -25,14 +25,14 @@ export interface Package {
   name: string;
 
   /**
-   * The display name for the extension used in the Marketplace.
-   */
-  displayName?: string;
-
-  /**
    * Package version.
    */
   version: string;
+
+  /**
+   * The display name for the extension used in the Marketplace.
+   */
+  displayName?: string;
 
   /**
    * ES Module path

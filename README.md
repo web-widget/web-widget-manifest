@@ -48,7 +48,7 @@ Many tools need some machine-readable descriptions of web widget applications: I
 
 There have been several efforts in this area, including:
 
-- [custom-elements-manifest](https://github.com/webcomponents/custom-elements-manifest)
+- [Custom Elements Manifest](https://github.com/webcomponents/custom-elements-manifest)
 - [Web Application Manifest](https://www.w3.org/TR/appmanifest/)
 - [Packaged Web Apps (Widgets)](https://www.w3.org/TR/2018/OBSL-widgets-20181011)
 - [Chrome Extensions: Manifest file format](https://developer.chrome.com/docs/extensions/mv3/manifest/)

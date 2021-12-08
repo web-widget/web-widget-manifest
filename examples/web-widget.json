@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.0.1",
+  "schemaVersion": "0.0.0",
   "name": "@gaoding-inc/demo-widget",
   "displayName": "Web Widget Demo",
   "version": "1.0.0",
@@ -174,7 +174,7 @@
     }
   },
   "dataUserInterface": {
-    "path": "demo-widget.esm.js",
-    "fallbackPath": "demo-widget.system.js"
+    "path": "demo-options-ui.esm.js",
+    "fallbackPath": "demo-options-ui.system.js"
   }
 }
