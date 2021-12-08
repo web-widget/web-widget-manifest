@@ -25,7 +25,7 @@ export interface Package {
   name: string;
 
   /**
-   * A short name suitable for display in a listing.
+   * The display name for the extension used in the Marketplace.
    */
   displayName?: string;
 
@@ -61,17 +61,6 @@ export interface Package {
   description?: string;
 
   /**
-   * An array of the modules this package contains.
-   */
-  declaration: Declaration;
-}
-
-/**
- * A description of a web widget application.
- */
-export type Declaration = {
-
-  /**
    * The shadow dom content slots that this element accepts.
    */
   slots?: Slot[];
@@ -87,8 +76,10 @@ export type Declaration = {
    */
   dataUserInterface?: DataUserInterface;
 
-  /* TODO
-
+  /* TODO:
+  - categories
+  - keywords
+  - preview || placeholder
   - parameters
   - portals
   - sandboxed
@@ -97,11 +88,9 @@ export type Declaration = {
   - resources
   - locales
   - sharedDependencies
-  - placeholder
   - size
-
    */
-};
+}
 
 export interface Slot {
   /**
@@ -172,7 +161,6 @@ export interface CssCustomProperty {
 }
 
 export interface Data {
-
   /**
    * JSON schema.
    */
@@ -196,6 +184,10 @@ export interface DataUserInterface {
    * SystemJS module path. It exists to solve browser compatibility issues.
    */
   fallbackPath?: string;
+
+  /* TODO:
+  - size
+   */
 }
 
 /**
