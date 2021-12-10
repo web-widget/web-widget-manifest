@@ -157,10 +157,10 @@
           }
         }
       }
-    },
-    "userInterface": {
-      "path": "demo-options-ui.esm.js",
-      "fallbackPath": "demo-options-ui.system.js"
     }
+  },
+  "dataUserInterface": {
+    "path": "demo-options-ui.esm.js",
+    "fallbackPath": "demo-options-ui.system.js"
   }
 }

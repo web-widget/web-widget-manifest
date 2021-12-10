@@ -71,20 +71,33 @@ export interface Package {
 
   data?: Data;
 
+  dataUserInterface?: DataUserInterface;
+
   /* TODO:
-  - categories
-  - keywords
-  - template || preview || placeholder
-  - parameters
-  - portals
-  - sandboxed
-  - features
-  - csp
-  - resources
-  - locales
-  - sharedDependencies
-  - size
+   - categories
+   - keywords
+   - template || preview || placeholder
+   - parameters
+   - portals
+   - sandboxed
+   - features
+   - csp
+   - resources
+   - locales
+   - sharedDependencies
+   - size
    */
+}
+
+/**
+ * @see https://www.w3.org/TR/appmanifest/#icons-member
+ */
+export interface Icon {
+  path: string;
+
+  sizes: string;
+
+  type?: string;
 }
 
 export interface Slot {
@@ -160,35 +173,24 @@ export interface Data {
    * JSON schema.
    */
   schema?: JSONSchema;
-
-  /**
-   * Read and write data through the user interface
-   */
-  userInterface?: {
-    /**
-     * ES Module path
-     */
-    path: string;
-
-    /**
-     * SystemJS module path. It exists to solve browser compatibility issues.
-     */
-    fallbackPath?: string;
-
-    /* TODO:
-    - size?: Size;
-    - schema?: UISchema;
-     */
-  };
 }
 
 /**
- * @see https://www.w3.org/TR/appmanifest/#icons-member
+ * Read and write data through the user interface
  */
-export interface Icon {
+export interface DataUserInterface {
+  /**
+   * ES Module path
+   */
   path: string;
 
-  sizes: string;
+  /**
+   * SystemJS module path. It exists to solve browser compatibility issues.
+   */
+  fallbackPath?: string;
 
-  type?: string;
+  /* TODO:
+   - size?: Size;
+   - schema?: UISchema;
+   */
 }
