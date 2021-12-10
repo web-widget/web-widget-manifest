@@ -71,11 +71,6 @@ export interface Package {
 
   data?: Data;
 
-  /**
-   * Read and write data through the user interface
-   */
-  dataUserInterface?: DataUserInterface;
-
   /* TODO:
   - categories
   - keywords
@@ -167,27 +162,24 @@ export interface Data {
   schema?: JSONSchema;
 
   /**
-   * The default value of the data, if any.
-   *
-   * This is the actual value, not a human readable description.
+   * Read and write data through the user interface
    */
-  default?: object;
-}
+  userInterface?: {
+    /**
+     * ES Module path
+     */
+    path: string;
 
-export interface DataUserInterface {
-  /**
-   * ES Module path
-   */
-  path: string;
+    /**
+     * SystemJS module path. It exists to solve browser compatibility issues.
+     */
+    fallbackPath?: string;
 
-  /**
-   * SystemJS module path. It exists to solve browser compatibility issues.
-   */
-  fallbackPath?: string;
-
-  /* TODO:
-  - size
-   */
+    /* TODO:
+    - size?: Size;
+    - schema?: UISchema;
+     */
+  };
 }
 
 /**
