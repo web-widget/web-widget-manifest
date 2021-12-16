@@ -69,7 +69,7 @@ export interface Package {
 
   cssProperties?: CssCustomProperty[];
 
-  data?: Data;
+  dataSchema?: JSONSchema;
 
   dataUserInterface?: DataUserInterface;
 
@@ -168,12 +168,7 @@ export interface CssCustomProperty {
   description?: string;
 }
 
-export interface Data {
-  /**
-   * JSON schema.
-   */
-  schema?: JSONSchema;
-}
+export {JSONSchema};
 
 /**
  * Read and write data through the user interface
